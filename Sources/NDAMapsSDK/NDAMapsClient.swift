@@ -34,7 +34,7 @@ public class NDAMapsClient {
     public init(options: ClientOptions) {
         self.apiKey = options.apiKey
         self.mapsApiBase = options.mapsApiBase ?? "https://mapapis.ndamaps.vn/v1"
-        self.tilesBase = options.tilesBase ?? "https://maptiles.openmap.vn"
+        self.tilesBase = options.tilesBase ?? "https://maptiles.ndamaps.vn"
         self.ndaviewBase = options.ndaviewBase ?? "https://api-view.ndamaps.vn/v1"
         self.maxRetries = options.maxRetries ?? 3
         self.baseDelayMs = options.baseDelayMs ?? 500
