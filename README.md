@@ -13,7 +13,7 @@ Add this block to your `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/ndamaps/sdk-swift.git", from: "0.1.0")
+    .package(url: "https://github.com/NDAMaps-vn/ndamaps-swift.git", from: "0.1.0")
 ]
 ```
 *Or, use the Xcode Package Manager (File > Add Packages).*
