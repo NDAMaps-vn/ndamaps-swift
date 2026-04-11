@@ -10,15 +10,12 @@ let package = Package(
         .watchOS(.v6)
     ],
     products: [
-        .library(
-            name: "NDAMapsSDK",
-            targets: ["NDAMapsSDK"]),
+        .library(name: "NDAMapsSDK", targets: ["NDAMapsSDK"]),
+        .executable(name: "NDAMapsExample", targets: ["NDAMapsExample"])
     ],
     targets: [
-        .target(
-            name: "NDAMapsSDK"),
-        .testTarget(
-            name: "NDAMapsSDKTests",
-            dependencies: ["NDAMapsSDK"]),
+        .target(name: "NDAMapsSDK", dependencies: []),
+        .executableTarget(name: "NDAMapsExample", dependencies: ["NDAMapsSDK"]),
+        .testTarget(name: "NDAMapsSDKTests", dependencies: ["NDAMapsSDK"]),
     ]
 )
