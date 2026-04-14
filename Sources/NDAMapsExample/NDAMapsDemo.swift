@@ -29,7 +29,8 @@ struct NDAMapsDemo {
             let p2 = OptimizedRouteLocation(lat: 21.03326, lon: 105.78743)
             let p3 = OptimizedRouteLocation(lat: 21.00329, lon: 105.81834)
             
-            let routeParams = OptimizedRouteParams(locations: [p1, p2, p3, p1], costing: "auto")
+            var routeParams = OptimizedRouteParams(locations: [p1, p2, p3, p1])
+            routeParams.costing = "auto"
             let routeRes = try await client.navigation.optimizedRoute(routeParams)
             
             if let trip = routeRes["trip"] as? [String: Any],
