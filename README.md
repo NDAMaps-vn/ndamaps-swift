@@ -2,25 +2,35 @@
   <img src="https://ndamaps.vn/logo.png" width="200" alt="NDAMaps Logo" />
 </p>
 
-# NDAMaps Swift SDK 🐦
+# NDAMaps Swift SDK
 
-The official Swift package for the [NDAMaps REST API](https://ndamaps.vn).
-Suitable for iOS, macOS, watchOS, tvOS, and Linux (Server-Side Swift). Includes full support for Swift Concurrency (`async/await`) leveraging `URLSession`.
+Official Swift package for **NDAMaps** — Vietnam's national digital map platform API.
 
-## 📦 Installation
+Supports **iOS**, **macOS**, **watchOS**, **tvOS**, and **Linux** (server-side Swift). Uses `URLSession` and **Swift concurrency** (`async`/`await`).
 
-Add this block to your `Package.swift`:
+## Features
+
+- **Places** — Autocomplete (Google params) and place detail with **session tokens** (`inout` params)
+- **Geocoding**, **Navigation** (including **optimized route**), **Maps**, **NDAView**, **Forcodes**
+- **Retries** — Exponential backoff for transient failures (without blocking the main actor when used from async contexts)
+
+## Requirements
+
+- Swift toolchain with **async/await** (Swift 5.5+)
+
+## Install
+
+Add to `Package.swift`:
 
 ```swift
 dependencies: [
     .package(url: "https://github.com/NDAMaps-vn/ndamaps-swift.git", from: "0.1.0")
 ]
 ```
-*Or, use the Xcode Package Manager (File > Add Packages).*
 
-## 🚀 Quick Start
+Or use **Xcode → File → Add Package Dependencies**.
 
-Initialize `NDAMapsClient` safely.
+## Quick start
 
 ```swift
 import NDAMapsSDK
@@ -30,44 +40,44 @@ let client = NDAMapsClient(options: options)
 
 Task {
     do {
-        // Example: Autocomplete Request
         var params = AutocompleteGoogleParams(input: "Hồ Hoàn Kiếm")
         let result = try await client.places.autocomplete(&params)
-        
+
         if let predictions = result["predictions"] as? [[String: Any]] {
-            print("Found \(predictions.count) predictions.")
+            print("Found \(predictions.count) predictions")
         }
-        
     } catch let error as NDAMapsError {
-        print("NDAMaps Error: \(error.description)")
+        print("NDAMaps:", error.description)
     } catch {
-        print("Unknown Error: \(error)")
+        print(error)
     }
 }
 ```
 
-## 🛠 Optimized Features
+## Session tokens (billing)
 
-- **Billing Sessions**: `client.places.autocomplete(&params)` takes `inout params` to automatically embed a generated session UUID under the hood to `params.sessiontoken`.
-- **Automatic Exponential Retries**: Transient network issues are heavily mitigated via `Task.sleep` without blocking the main UI thread.
-- **Traveling Salesperson Optimization**: 
+`autocomplete(&params)` can inject `sessiontoken` into `params` for you. Call `placeDetail` afterward so the same token groups autocomplete + detail for billing.
+
+## Navigation (optimized route)
 
 ```swift
 let routeParams = OptimizedRouteParams(locations: [
     OptimizedRouteLocation(lat: 21.03624, lon: 105.77142),
     OptimizedRouteLocation(lat: 21.03326, lon: 105.78743),
-    OptimizedRouteLocation(lat: 21.00329, lon: 105.81834)
+    OptimizedRouteLocation(lat: 21.00329, lon: 105.81834),
 ])
 let optimizedRoute = try await client.navigation.optimizedRoute(routeParams)
 ```
 
-## 🛑 Exceptions (`NDAMapsError`)
-Explicit strongly-typed errors to catch API anomalies:
-- `.invalidAPIKey(String)`
-- `.placeNotFound(String)`
-- `.rateLimitExceeded(String)`
-- `.invalidParams(String)`
-- `.networkError(String)`
+## Errors
 
-## 📜 License
-MIT License.
+`NDAMapsError` includes cases such as `invalidAPIKey`, `invalidForcode`, `placeNotFound`, `zeroResults`, `invalidParams`, `rateLimitExceeded`, `networkError`, `unknown`, and `invalidJSON`. Use pattern matching or `description` for logging.
+
+## Links
+
+- [NDAMaps documentation](https://docs.ndamaps.vn)
+- [NDAMaps platform](https://ndamaps.vn)
+
+## License
+
+MIT
